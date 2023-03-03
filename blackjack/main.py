@@ -1,4 +1,5 @@
 import random
+from banner import logo
 
 cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
@@ -31,29 +32,6 @@ DEELER = {
     'total': 0
 }
 
-
-def first_hand():
-    counter = 0;
-    while counter < 2:
-        player_draw()
-        deeler_draw()
-        counter += 1
-
-
-def player_draw():
-    random_card = random.randint(0, 12)
-    card_player = cards[random_card]
-    PLAYER['cards'].append(card_player)
-    PLAYER['total'] += cards_point[card_player]
-
-
-def deeler_draw():
-     random_card = random.randint(0, 12)
-     deeler_card = cards[random_card]
-     DEELER['cards'].append(deeler_card)
-     DEELER['total'] += cards_point[deeler_card]
-
-
 def player_hand():
     print(f'Your cards: {PLAYER["cards"]} - Poits: {PLAYER["total"]}')
 
@@ -66,23 +44,57 @@ def deeler_hands():
      print(f'Deeler cards: {DEELER["cards"]} - Poits: {DEELER["total"]}')
 
 
+def first_hand():
+    counter = 0;
+    while counter < 2:
+        player_draw()
+        deeler_draw()
+        counter += 1
+
+
+def player_draw():
+    card_player = random.choice(cards)
+    PLAYER['cards'].append(card_player)
+    PLAYER['total'] += cards_point[card_player]
+
+
+def deeler_draw():
+     deeler_card = random.choice(cards)
+     DEELER['cards'].append(deeler_card)
+     DEELER['total'] += cards_point[deeler_card]
+
+
+def player_draws():
+    while True:
+        op = input('You want draw (y) or pass (n)? ')
+        if op == 'y':
+            player_draw()
+            player_hand()
+        else:
+            break
+
+
+def deeler_draws():
+    while DEELER['total'] < 17:
+        deeler_draw()
+
+
 def points():
-    print(f'Deeler points: {DEELER["total"]}')
-    print(f'Your points: {PLAYER["total"]}')
+    print(f'Deeler points: {DEELER["total"]} - Cards: {DEELER["cards"]}')
+    print(f'Your points: {PLAYER["total"]} - Cards: {PLAYER["cards"]}')
 
 
-def verify_points():
-    game_status = True
-    if DEELER['total'] >= 17:
-        if PLAYER['total'] > 21:
-            print('You lose!!!')
-        elif PLAYER['total'] == 21:
-            print('You Win!!!')
-        elif PLAYER['total'] <= 21 and PLAYER['total'] > DEELER['total']:
-            print('You Win!!!')
-        game_status = False
-    points()
-    return game_status
+def score():
+    if PLAYER['total'] > 21:
+        print('You lose - score burst')
+    elif PLAYER['total'] == 21:
+        print('You win - blackjack')
+    elif PLAYER['total'] > DEELER['total']:
+        print('You win - best score')
+    elif DEELER['total'] > 21:
+        print('You win - deeler score burst')
+    else:
+        print('You lose!!!')
 
 
 def clear_hands():
@@ -93,33 +105,23 @@ def clear_hands():
 
 
 def game():
-    start = int(input('You want to play(1) or exit(0)? '))
-    game_status = False
+    logo()
     clear_hands()
-    if start == 1:
-        game_status = True
-        first_hand()
-        player_hand()
-        deeler_shadow_hands()
-        while game_status:
-            op = input('You want draw (y) or pass (n)? ')
-            if op == 'y':
-                player_draw()
-                deeler_draw()
-            else:
-                deeler_draw()
-
-            player_hand()
-            deeler_shadow_hands()
-            game_status = verify_points()
-        game()
-    else:
-        print('Bye')
+    first_hand()
+    player_hand()
+    deeler_shadow_hands()
+    player_draws()
+    deeler_draws()
+    score()
+    points()
 
 
 if __name__ == "__main__":
     print('Black Jack')
-    game()
+    while int(input('You want to play(1) or exit(0)? ')) == 1:
+        game()
+    else:
+        print('Bye!!!')
     
     
 
