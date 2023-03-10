@@ -1,4 +1,4 @@
-from random import randint
+from random import choice
 from game_data import data
 from art import logo, vs
 
@@ -21,17 +21,15 @@ def compare(person_a, person_b):
             print(f'Correct answers: your score is: {SCORE+1}')
             return 1
         elif (selection < compare_persons[score]):
-            print(f'Wrong answers: You Lose!!!')
+            print(f'Wrong answers: You Lose final score: {SCORE}')
             return -1
     
 
-def game():
-    compare_a = randint(0, 1)
-    compare_b = randint(0, 1)
-    while compare_a == compare_b:
-        compare_b = randint(0, 1)
-    person_a = data[compare_a]
-    person_b = data[compare_b]
+def game(first_chose):
+    person_a = first_chose
+    person_b = choice(data)
+    while person_a == person_b:
+        person_b = choice(data)
     print_person("Compare A", person_a)
     print(vs)
     print_person("Compare B", person_b)
@@ -40,8 +38,9 @@ def game():
 
 if __name__ == "__main__":
     print(logo)
+    first_chose = choice(data)
     while SCORE >= 0 and SCORE < 4:
-        score = game()
+        score = game(first_chose)
         if score > 0:
             SCORE += score
         else:

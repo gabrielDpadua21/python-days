@@ -10,5 +10,11 @@ data = [
         "followers": 200,
         "job": "Footballplayer",
         "country": "Brasil"
+    },
+    {
+        "name": "Messi",
+        "followers": 150,
+        "job": "Footballplayer",
+        "country": "Argentina"
     }
 ]
