@@ -16,9 +16,9 @@ def random_values():
 def you_generarion():
     year = int(input("What's your year of birth? "))
     if year > 1980 and year <= 1994:
-        print("You ara a millenial")
+        print("You ara a millennial")
     elif year > 1994:
-        print("You ara generation Z")
+        print("You are generation Z")
 
 
 you_generarion()
