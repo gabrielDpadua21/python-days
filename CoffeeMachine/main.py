@@ -53,10 +53,13 @@ def make_coffee(coffee):
         print("The machine dont have the resources to make this coffee")
     elif coffee_selected['cost'] < total:
         print(f'Enjoy your coffee: {coffee}')
+        change = round((total - coffee_selected["cost"]), 2)
+        if change > 0:
+            print(f"There is your change: {change}")
         recalculate_resources(coffee_selected, total)
     else:
         print(f'The coffee select cost {coffee_selected["cost"]} do you have {total}')
-        print('The money will return')
+        print('The money refunded')
         print('Bye')
 
 
