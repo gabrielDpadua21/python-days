@@ -20,8 +20,45 @@ resources = {
 }
 
 
+def get_money():
+    quarters = int(input("How manu quarters do you have? ")) * COINS['quarters']
+    dimes = int(input("How manu dimes do you have? ")) * COINS['dimes']
+    nickles = int(input("How manu nicker do you have? ")) * COINS['nickles']
+    pennies = int(input("How manu pennies do you have? ")) * COINS['pennies']
+    return quarters + dimes + nickles + pennies
+
+
+def recalculate_resources(coffee, money):
+    resources['water']['total'] -= coffee['ingredients']['water']
+    if 'milk' in coffee['ingredients']:
+        resources['milk']['total'] -= coffee['ingredients']['milk']
+    resources['coffee']['total'] -= coffee['ingredients']['coffee']
+    resources['money']['total'] += money
+
+
+def calculate_resources(coffee):
+    if resources['water']['total'] < coffee['ingredients']['water']:
+        return False
+    if resources['coffee']['total'] < coffee['ingredients']['coffee']:
+        return False
+    if 'milk' in coffee['ingredients'] and resources['milk']['total'] < coffee['ingredients']['milk']:
+        return False
+    return True
+
+
 def make_coffee(coffee):
-    pass
+    coffee_selected = MENU[coffee]
+    total = get_money()
+    if not calculate_resources(coffee_selected):
+        print("The machine dont have the resources to make this coffee")
+    elif coffee_selected['cost'] < total:
+        print(f'Enjoy your coffee: {coffee}')
+        recalculate_resources(coffee_selected, total)
+    else:
+        print(f'The coffee select cost {coffee_selected["cost"]} do you have {total}')
+        print('The money will return')
+        print('Bye')
+
 
 
 def report_machine():
@@ -42,4 +79,9 @@ OPTIONS = {
 
 if __name__ == "__main__":
     print("Coffee Machine")
-    OPTIONS['report']()
+    while True:
+        option = input("Do you want make a coffee? type espresso/latte/cappuccino ")
+        if option != 'report':
+            OPTIONS[option](option)
+        else:
+            OPTIONS[option]()
